@@ -552,7 +552,7 @@ class BlipTextPreTrainedModel(PreTrainedModel):
 
     config_class = BlipTextConfig
     base_model_prefix = "bert"
-    _no_split_modules = ["BlipTextAttention"]
+    _no_split_modules = ["BlipTextEmbeddings", "BlipTextAttention"]
 
     def _init_weights(self, module):
         """Initialize the weights"""
