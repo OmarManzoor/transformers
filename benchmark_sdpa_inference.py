@@ -66,9 +66,7 @@ def get_batch(batch_size, sequence_length):
     return tokens, mask
 
 
-def timing_cuda(model, num_batches, input_ids, masks, is_decoder, generation_config=None):
-    if is_decoder:
-        model.generation_config.eos_token_id = None
+def timing_cuda(model, num_batches, input_ids, masks, generation_config=None):
 
     torch.cuda.reset_peak_memory_stats(device)
     torch.cuda.synchronize()
@@ -82,10 +80,7 @@ def timing_cuda(model, num_batches, input_ids, masks, is_decoder, generation_con
         torch.cuda.synchronize()
         start_event.record()
 
-        if is_decoder:
-            _ = model.generate(input_ids, attention_mask=masks, generation_config=generation_config)
-        else:
-            _ = model(input_ids, masks)
+        _ = model(input_ids, masks)
         end_event.record()
         torch.cuda.synchronize()
 
@@ -98,11 +93,11 @@ def timing_cuda(model, num_batches, input_ids, masks, is_decoder, generation_con
     return np.mean(latencies), max_memory
 
 
-def benchmark(model, input_ids, masks, num_batches, is_decoder, max_token, pad_token_id):
+def benchmark(model, input_ids, masks, num_batches, max_token, pad_token_id):
     _ = model(input_ids, masks)
     torch.cuda.synchronize()
 
-    total_time, max_mem = timing_cuda(model, num_batches, input_ids, masks, is_decoder)
+    total_time, max_mem = timing_cuda(model, num_batches, input_ids, masks)
 
     return total_time, max_mem
 
@@ -164,7 +159,6 @@ if __name__ == "__main__":
                     input_ids,
                     masks,
                     args.num_batches,
-                    args.is_decoder,
                     args.max_token,
                     tokenizer.pad_token_id,
                 )
@@ -210,7 +204,6 @@ if __name__ == "__main__":
                         input_ids,
                         masks,
                         args.num_batches,
-                        args.is_decoder,
                         args.max_token,
                         tokenizer.pad_token_id,
                     )
