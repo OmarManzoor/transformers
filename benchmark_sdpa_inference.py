@@ -66,7 +66,7 @@ def get_batch(batch_size, sequence_length):
     return tokens, mask
 
 
-def timing_cuda(model, num_batches, input_ids, masks, generation_config=None):
+def timing_cuda(model, num_batches, input_ids, masks):
 
     torch.cuda.reset_peak_memory_stats(device)
     torch.cuda.synchronize()
@@ -85,7 +85,6 @@ def timing_cuda(model, num_batches, input_ids, masks, generation_config=None):
         torch.cuda.synchronize()
 
         latency_ms = start_event.elapsed_time(end_event)
-        print(f"\nLatency per token: {latency_ms / generation_config.min_new_tokens:.3f} ms")
         latencies.append(latency_ms)
 
     max_memory = torch.cuda.max_memory_allocated(device)
