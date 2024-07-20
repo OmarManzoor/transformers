@@ -87,8 +87,8 @@ if __name__ == "__main__":
 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-    BATCH_SIZES = [1]
-    SEQ_LEN = [512]
+    BATCH_SIZES = [1, 2, 4, 8]
+    SEQ_LEN = [256, 512]
     device = torch.device("cuda:0" if torch.cuda.is_available() and args.use_cuda else "cpu")
 
     output_file = open("log_{}_train.csv".format(args.model_name.replace("/", "-")), "w")
