@@ -5,7 +5,7 @@ from typing import Dict
 import numpy as np
 import torch
 from tqdm.auto import tqdm
-from transformers import AlbertForSequenceClassification
+from transformers import AutoModelForSequenceClassification
 import gc
 
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     with torch.device(device):
-        hf_model = AlbertForSequenceClassification.from_pretrained(
+        hf_model = AutoModelForSequenceClassification.from_pretrained(
             args.model_name, torch_dtype=torch.float16 if args.use_half else None, attn_implementation="sdpa"
         )
     hf_model = hf_model.to(device)
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     gc.collect()
 
     with torch.device(device):
-        hf_model = AlbertForSequenceClassification.from_pretrained(
+        hf_model = AutoModelForSequenceClassification.from_pretrained(
             args.model_name, torch_dtype=torch.float16 if args.use_half else None, attn_implementation="eager"
         )
     hf_model = hf_model.to(device)
