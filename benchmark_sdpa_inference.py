@@ -5,7 +5,7 @@ import pandas as pd
 import torch
 import gc
 from tqdm import tqdm
-from transformers import AutoTokenizer, AutoModelForQuestionAnswering
+from transformers import AutoTokenizer, AlbertModel
 
 
 def get_parser():
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
     tokenizer.padding_side = "left"
 
-    autoclass = AutoModelForQuestionAnswering
+    autoclass = AlbertModel
 
     if args.use_cuda:
         with torch.device("cuda:0"):
@@ -174,7 +174,6 @@ if __name__ == "__main__":
         with torch.device("cuda:0"):
             hf_model = autoclass.from_pretrained(args.model_name, torch_dtype=torch.float16 if args.use_half else None,
                                                  attn_implementation="sdpa")
-        # in PyTorch we trust :)
         hf_model = hf_model.to("cuda:0")
         hf_model = hf_model.to(torch.float16)
     else:
