@@ -5,7 +5,7 @@ import pandas as pd
 import torch
 import gc
 from tqdm import tqdm
-from transformers import AutoTokenizer, AlbertModel
+from transformers import AutoTokenizer, AlbertForSequenceClassification
 
 
 def get_parser():
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
     tokenizer.padding_side = "left"
 
-    autoclass = AlbertModel
+    autoclass = AlbertForSequenceClassification
 
     if args.use_cuda:
         with torch.device("cuda:0"):
