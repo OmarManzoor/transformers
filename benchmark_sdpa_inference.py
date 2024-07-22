@@ -106,8 +106,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.sweep:
-        BATCH_SIZES = [1, 2, 4]
-        SEQ_LEN = [128, 265]
+        BATCH_SIZES = [4, 8, 16]
+        SEQ_LEN = [128, 256, 512]
     else:
         BATCH_SIZES = [args.batch_size]
         SEQ_LEN = [args.seqlen]
