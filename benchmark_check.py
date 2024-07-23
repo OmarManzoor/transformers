@@ -91,7 +91,7 @@ def timing_cuda(model, num_batches, input_ids, masks, is_decoder, generation_con
         torch.cuda.synchronize()
 
         latency_ms = start_event.elapsed_time(end_event)
-        if is_decoder:
+        if generation_config:
             print(f"\nLatency per token: {latency_ms / generation_config.min_new_tokens:.3f} ms")
         latencies.append(latency_ms)
 
@@ -101,8 +101,9 @@ def timing_cuda(model, num_batches, input_ids, masks, is_decoder, generation_con
 
 
 def benchmark(model, input_ids, masks, num_batches, is_decoder, max_token, pad_token_id):
-    if is_decoder:
+    if model.generation_config:
         model.generation_config.eos_token_id = None
+    if is_decoder:
         gen_config = GenerationConfig(
             max_new_tokens=max_token,
             min_new_tokens=max_token,
