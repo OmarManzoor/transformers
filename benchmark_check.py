@@ -100,8 +100,8 @@ def timing_cuda(model, num_batches, input_ids, masks, is_decoder, generation_con
 
 
 def benchmark(model, input_ids, masks, num_batches, is_decoder, max_token, pad_token_id):
-    model.generation_config.eos_token_id = None
     if is_decoder:
+        model.generation_config.eos_token_id = None
         gen_config = GenerationConfig(
             max_new_tokens=max_token,
             min_new_tokens=max_token,
