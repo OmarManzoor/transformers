@@ -5,7 +5,6 @@ import torch
 import gc
 from tqdm import tqdm
 from transformers import AutoModel, AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer, GenerationConfig
-from optimum.exporters import TasksManager
 
 
 def get_parser():
@@ -150,14 +149,7 @@ if __name__ == "__main__":
 
     tokenizer.padding_side = "left"
 
-    task = TasksManager.infer_task_from_model(args.model_name)
-
-    if task == "text-generation":
-        autoclass = AutoModelForCausalLM
-    elif task == "text2text-generation":
-        autoclass = AutoModelForSeq2SeqLM
-    else:
-        autoclass = AutoModel
+    autoclass = AutoModel
 
     print(f"Autoclass being used is {autoclass.__name__}\n\n")
     if args.use_cuda:
